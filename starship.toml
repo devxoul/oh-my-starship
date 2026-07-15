@@ -1,0 +1,117 @@
+# oh-my-starship: an opinionated, powerline-style Starship prompt.
+#
+# The custom git modules shell out to two helper scripts, located via the
+# $OMS_DIR environment variable that the installer adds to your shell rc.
+# The git_state module guards its "when" with [ -x ... ] so the prompt
+# degrades gracefully to the plain directory segment if $OMS_DIR is unset
+# or the scripts are missing.
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$username\
+$directory\
+${custom.git_state}\
+${custom.git_dirty}\
+${custom.git_clean}\
+${custom.no_git}\
+ """
+
+add_newline = false
+command_timeout = 5000
+
+[directory]
+style = 'fg:black bg:blue'
+format = "[ $path ]($style)"
+truncation_length = 0
+truncate_to_repo = false
+
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[custom.git_state]
+command = "$OMS_DIR/git-prompt.sh"
+when = "[ -x \"$OMS_DIR/git-state.sh\" ] && $OMS_DIR/git-state.sh"
+style = 'fg:white bg:red'
+format = "[](fg:blue bg:red)[$output ]($style)[](fg:red) "
+shell = ["sh"]
+
+[custom.git_dirty]
+command = "$OMS_DIR/git-prompt.sh"
+when = "git rev-parse --is-inside-work-tree 2>/dev/null && ! $OMS_DIR/git-state.sh && test -n \"$(git status --porcelain 2>/dev/null | head -1)\""
+style = 'fg:black bg:yellow'
+format = "[](fg:blue bg:yellow)[$output ]($style)[](fg:yellow) "
+shell = ["sh"]
+
+[custom.git_clean]
+command = "$OMS_DIR/git-prompt.sh"
+when = "git rev-parse --is-inside-work-tree 2>/dev/null && ! $OMS_DIR/git-state.sh && test -z \"$(git status --porcelain 2>/dev/null | head -1)\""
+style = 'fg:black bg:green'
+format = "[](fg:blue bg:green)[$output ]($style)[](fg:green) "
+shell = ["sh"]
+
+[custom.no_git]
+command = "printf ."
+when = "! git rev-parse --is-inside-work-tree 2>/dev/null"
+format = "[](fg:blue) "
+shell = ["sh"]
+
+[character]
+success_symbol = ''
+error_symbol = '[✘](red) '
+
+[username]
+style_user = 'fg:white bg:black'
+style_root = 'fg:yellow bg:black'
+format = "[ $user@ ]($style)[](fg:black bg:blue)"
+
+[hostname]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[terraform]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[python]
+disabled = true
+
+[rust]
+disabled = true
+
+[golang]
+disabled = true
+
+[java]
+disabled = true
+
+[kotlin]
+disabled = true
+
+[swift]
+disabled = true
+
+[ruby]
+disabled = true
+
+[package]
+disabled = true
+
+[cmake]
+disabled = true
+
+[cmd_duration]
+disabled = true
