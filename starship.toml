@@ -1,21 +1,17 @@
 # oh-my-starship: an opinionated, powerline-style Starship prompt.
 #
-# The custom git modules shell out to two helper scripts, located via the
-# $OMS_DIR environment variable that the installer adds to your shell rc.
-# The git_state module guards its "when" with [ -x ... ] so the prompt
-# degrades gracefully to the plain directory segment if $OMS_DIR is unset
-# or the scripts are missing.
+# The git segment is rendered by one helper script (one rev-parse + one status
+# per prompt), located via the $OMS_DIR environment variable that the installer
+# adds to your shell rc. If $OMS_DIR is unset or the script is missing, the
+# prompt degrades gracefully to the plain directory segment.
 
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
 $username\
 $directory\
-${custom.git_state}\
-${custom.git_dirty}\
-${custom.git_clean}\
-${custom.no_git}\
- """
+${custom.git}\
+"""
 
 add_newline = false
 command_timeout = 5000
@@ -32,31 +28,10 @@ disabled = true
 [git_status]
 disabled = true
 
-[custom.git_state]
-command = "$OMS_DIR/git-prompt.sh"
-when = "[ -x \"$OMS_DIR/git-state.sh\" ] && $OMS_DIR/git-state.sh"
-style = 'fg:white bg:red'
-format = "[](fg:blue bg:red)[$output ]($style)[](fg:red) "
-shell = ["sh"]
-
-[custom.git_dirty]
-command = "$OMS_DIR/git-prompt.sh"
-when = "git rev-parse --is-inside-work-tree 2>/dev/null && ! $OMS_DIR/git-state.sh && test -n \"$(git status --porcelain 2>/dev/null | head -1)\""
-style = 'fg:black bg:yellow'
-format = "[](fg:blue bg:yellow)[$output ]($style)[](fg:yellow) "
-shell = ["sh"]
-
-[custom.git_clean]
-command = "$OMS_DIR/git-prompt.sh"
-when = "git rev-parse --is-inside-work-tree 2>/dev/null && ! $OMS_DIR/git-state.sh && test -z \"$(git status --porcelain 2>/dev/null | head -1)\""
-style = 'fg:black bg:green'
-format = "[](fg:blue bg:green)[$output ]($style)[](fg:green) "
-shell = ["sh"]
-
-[custom.no_git]
-command = "printf ."
-when = "! git rev-parse --is-inside-work-tree 2>/dev/null"
-format = "[](fg:blue) "
+[custom.git]
+command = '"$OMS_DIR/git-prompt.sh" 2>/dev/null || printf "\033[34m\356\202\260\033[0m"'
+when = true
+format = "$output "
 shell = ["sh"]
 
 [character]

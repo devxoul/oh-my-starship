@@ -45,18 +45,13 @@ Removes the scripts, restores your previous `starship.toml` from backup, and str
 
 ## How it works
 
-The prompt is driven by four `[custom.*]` modules in `starship.toml`. They shell out to two small scripts:
+The git segment is a single `[custom.git]` module in `starship.toml` that runs `scripts/git-prompt.sh`. The script renders the whole segment (branch/tag/SHA, staged `✚` and conflict `✖` indicators, state label, and colors) from one `git rev-parse` and one `git status --porcelain=v2 --branch` call per prompt.
 
-| Script | Role |
-| --- | --- |
-| `scripts/git-state.sh` | Fast boolean: exit 0 if the repo is in a special state (merge/rebase/etc.) |
-| `scripts/git-prompt.sh` | Computes the branch/tag/SHA, staged (`✚`) and conflict (`✖`) indicators, and the state label |
-
-The scripts are located at runtime via the `OMS_DIR` environment variable (set by the installer). Each module guards its `when` condition with `[ -x "$OMS_DIR/git-state.sh" ]`, so if `OMS_DIR` is unset or the scripts are missing, the prompt degrades gracefully to just the directory segment instead of erroring.
+The script is located at runtime via the `OMS_DIR` environment variable (set by the installer). If `OMS_DIR` is unset or the script is missing, the prompt degrades gracefully to just the directory segment instead of erroring.
 
 ## Customizing
 
-Edit `starship.toml` directly. The color scheme lives in the `style` fields of the four `custom.git_*` modules and the `directory` / `username` modules. Segment colors:
+Edit `starship.toml` directly. The git segment colors are ANSI codes in the "Colors" block of `scripts/git-prompt.sh`; the `directory` / `username` colors live in their `style` fields. Segment colors:
 
 | State | Background |
 | --- | --- |

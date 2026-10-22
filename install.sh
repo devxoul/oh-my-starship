@@ -24,7 +24,7 @@ fi
 info "Installing helper scripts to $DATA_DIR"
 mkdir -p "$DATA_DIR"
 install -m 0755 "$REPO_DIR/scripts/git-prompt.sh" "$DATA_DIR/git-prompt.sh"
-install -m 0755 "$REPO_DIR/scripts/git-state.sh" "$DATA_DIR/git-state.sh"
+rm -f "$DATA_DIR/git-state.sh"
 ok "Scripts installed"
 
 mkdir -p "$CONFIG_DIR"

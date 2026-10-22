@@ -62,6 +62,7 @@ FG_GREEN=$'\033[32m'
 FG_YELLOW=$'\033[33m'
 FG_RED=$'\033[31m'
 ARROW=$(printf '\xee\x82\xb0')
+BRANCH_ICON=$(printf '\xee\x82\xa0')
 
 TESTDIR=$(mktemp -d)
 NOGIT="$TESTDIR/nogit"
@@ -96,7 +97,7 @@ assert_arrow_count "2 segments = 2 arrows" "$out" 2
 assert_not_contains "no yellow segment" "$out" "$BG_YELLOW"
 assert_not_contains "no red segment" "$out" "$BG_RED"
 assert_contains "shows branch name" "$out" "main"
-assert_contains "shows branch glyph" "$out" ""
+assert_contains "shows branch glyph" "$out" "${BRANCH_ICON} main"
 assert_contains "space before trailing arrow" "$out" " ${RESET}${FG_GREEN}${ARROW}"
 
 # --- Dirty git repo (untracked file) ---
