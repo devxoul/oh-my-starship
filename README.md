@@ -8,6 +8,8 @@ An opinionated, powerline-style [Starship](https://starship.rs/) prompt that sta
 
 Every language/runtime/cloud module is disabled by design. No Node version, no Python venv, no AWS region — just a fast, quiet prompt.
 
+![oh-my-starship prompt going from clean to staged to a merge conflict](./assets/screenshot.png)
+
 ```
  user@  ~/code/project   main   (green = clean)
  user@  ~/code/project   main ✚  (yellow = dirty, ✚ = staged)
